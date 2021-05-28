@@ -895,10 +895,10 @@ Steve Baz
   <entry>
     <title>Fiddler</title>
     <url>/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_1.jpg"></p>
+    <content><![CDATA[<h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="/images/fiddler/20210528_fiddler_1.jpg"></p>
 <ol>
 <li><p>在HTTPS选项卡Actions上，选择<code>Trust Root Certificate</code>安装证书</p>
-<p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_2.png"></p>
+<p><img src="/images/fiddler/20210528_fiddler_2.png"></p>
 </li>
 <li><p>左下角模式为Captuing，选项栏勾选<code>Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）</code>和<code>Decode（解压请求）</code></p>
 </li>
@@ -928,7 +928,8 @@ Steve Baz
 <h3 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h3><ol>
 <li><p>右键save-》Response-》Response Body到本地文件-》放入M3u8地址</p>
 </li>
-<li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面<img src="https://pic1.zhimg.com/80/v2-f4eb3c975c942624497eba0f0f5a3ec2_720w.jpg?source=1940ef5c" alt="img"></p>
+<li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面</p>
+<p><img src="/images/fiddler/20210528_fiddler_3.jpg"></p>
 </li>
 <li><p>点击Go</p>
 </li>
