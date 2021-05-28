@@ -188,7 +188,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Fiddler下载</a>
+            <a href="/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/" class="post-title-link" itemprop="url">Fiddler</a>
         </h2>
 
         <div class="post-meta">
@@ -212,7 +212,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><ul>
+          <h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_1.jpg"></p>
+<ol>
+<li><p>在HTTPS选项卡Actions上，选择<code>Trust Root Certificate</code>安装证书</p>
+<p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_2.png"></p>
+</li>
+<li><p>左下角模式为Captuing，选项栏勾选<code>Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）</code>和<code>Decode（解压请求）</code></p>
+</li>
+<li><p>在右侧Filters选项卡，按条件使用，如Show only if URL contains填入.m3u8，或Ctrl+F搜索m3u8</p>
+</li>
+</ol>
+<h1 id="系统代理设置"><a href="#系统代理设置" class="headerlink" title="系统代理设置"></a>系统代理设置</h1><p>IE浏览器打开Internet选项，修改<code>局域网设置</code></p>
+<ol>
+<li>勾选<code>为LAN使用代理服务器</code>，并配置地址为127.0.0.1，端口8888</li>
+<li>关闭自动配置，<code>自动检测设置</code>，<code>使用自动配置脚本</code></li>
+</ol>
+<p>如Chrome使用了SwitchyOmega，修改成<code>系统代理</code></p>
+<h1 id="Fiddler的应用"><a href="#Fiddler的应用" class="headerlink" title="Fiddler的应用"></a>Fiddler的应用</h1><h2 id="一、应用使用"><a href="#一、应用使用" class="headerlink" title="一、应用使用"></a>一、应用使用</h2><h3 id="应用代理配置"><a href="#应用代理配置" class="headerlink" title="应用代理配置"></a>应用代理配置</h3><ul>
 <li><p>方法一</p>
 <ul>
 <li>使用浏览器代理，其它不需要修改即可</li>
@@ -226,7 +242,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h1><ol>
+<h3 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h3><ol>
 <li><p>右键save-》Response-》Response Body到本地文件-》放入M3u8地址</p>
 </li>
 <li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面<img src="https://pic1.zhimg.com/80/v2-f4eb3c975c942624497eba0f0f5a3ec2_720w.jpg?source=1940ef5c" alt="img"></p>
@@ -234,13 +250,17 @@
 <li><p>点击Go</p>
 </li>
 </ol>
-<h1 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h1><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h3><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
 <p>A: 可以先抓出所有 M3U8 链接，有三种方法批量下载：</p>
 <ol>
 <li>将 m3u8 链接每行一个存入一个<code>.txt</code> 文件，然后将文件直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
 <li>将 m3u8 文件存到一个文件夹中，然后将文件夹直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
 </ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
+<h2 id="二、断点调试"><a href="#二、断点调试" class="headerlink" title="二、断点调试"></a>二、断点调试</h2><p>略…</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39883139/article/details/98853135">https://blog.csdn.net/weixin_39883139/article/details/98853135</a></p>
+</blockquote>
 
       
     </div>

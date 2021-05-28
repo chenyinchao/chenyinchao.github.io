@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="网络配置 方法一  使用浏览器代理，其它不需要修改即可   方法二  类型：HTTP代理 地址：127.0.0.1 端口：8888    N_m3u8DL-CLI-SimpleG下载 右键save-》Response-》Response Body到本地文件-》放入M3u8地址  右键copy-》Just Url-》将红框内容粘贴到BASEURL里面  点击Go   QAQ: 如果需要下载多个视频，">
+  <meta name="description" content="Fiddler的配置  在HTTPS选项卡Actions上，选择Trust Root Certificate安装证书   左下角模式为Captuing，选项栏勾选Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）和Decode（解压请求）  在右侧Filters选项卡，按条件使用，如Show only if URL c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Fiddler下载">
+<meta property="og:title" content="Fiddler">
 <meta property="og:url" content="http://example.com/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/index.html">
 <meta property="og:site_name" content="改变、突破">
-<meta property="og:description" content="网络配置 方法一  使用浏览器代理，其它不需要修改即可   方法二  类型：HTTP代理 地址：127.0.0.1 端口：8888    N_m3u8DL-CLI-SimpleG下载 右键save-》Response-》Response Body到本地文件-》放入M3u8地址  右键copy-》Just Url-》将红框内容粘贴到BASEURL里面  点击Go   QAQ: 如果需要下载多个视频，">
+<meta property="og:description" content="Fiddler的配置  在HTTPS选项卡Actions上，选择Trust Root Certificate安装证书   左下角模式为Captuing，选项栏勾选Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）和Decode（解压请求）  在右侧Filters选项卡，按条件使用，如Show only if URL c">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/%5Cimages%5Cfiddler%5C20210528_fiddler_1.jpg">
+<meta property="og:image" content="http://example.com/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/%5Cimages%5Cfiddler%5C20210528_fiddler_2.png">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-f4eb3c975c942624497eba0f0f5a3ec2_720w.jpg?source=1940ef5c">
 <meta property="article:published_time" content="2021-05-28T01:22:30.000Z">
-<meta property="article:modified_time" content="2021-05-28T07:10:57.350Z">
+<meta property="article:modified_time" content="2021-05-28T08:33:14.000Z">
 <meta property="article:author" content="ycc">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-f4eb3c975c942624497eba0f0f5a3ec2_720w.jpg?source=1940ef5c">
+<meta name="twitter:image" content="http://example.com/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/%5Cimages%5Cfiddler%5C20210528_fiddler_1.jpg">
 
 <link rel="canonical" href="http://example.com/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/">
 
@@ -47,7 +49,7 @@
   };
 </script>
 
-  <title>Fiddler下载 | 改变、突破</title>
+  <title>Fiddler | 改变、突破</title>
   
 
 
@@ -194,7 +196,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Fiddler下载
+          Fiddler
         </h1>
 
         <div class="post-meta">
@@ -218,7 +220,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><ul>
+        <h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_1.jpg"></p>
+<ol>
+<li><p>在HTTPS选项卡Actions上，选择<code>Trust Root Certificate</code>安装证书</p>
+<p><img src="%5Cimages%5Cfiddler%5C20210528_fiddler_2.png"></p>
+</li>
+<li><p>左下角模式为Captuing，选项栏勾选<code>Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）</code>和<code>Decode（解压请求）</code></p>
+</li>
+<li><p>在右侧Filters选项卡，按条件使用，如Show only if URL contains填入.m3u8，或Ctrl+F搜索m3u8</p>
+</li>
+</ol>
+<h1 id="系统代理设置"><a href="#系统代理设置" class="headerlink" title="系统代理设置"></a>系统代理设置</h1><p>IE浏览器打开Internet选项，修改<code>局域网设置</code></p>
+<ol>
+<li>勾选<code>为LAN使用代理服务器</code>，并配置地址为127.0.0.1，端口8888</li>
+<li>关闭自动配置，<code>自动检测设置</code>，<code>使用自动配置脚本</code></li>
+</ol>
+<p>如Chrome使用了SwitchyOmega，修改成<code>系统代理</code></p>
+<h1 id="Fiddler的应用"><a href="#Fiddler的应用" class="headerlink" title="Fiddler的应用"></a>Fiddler的应用</h1><h2 id="一、应用使用"><a href="#一、应用使用" class="headerlink" title="一、应用使用"></a>一、应用使用</h2><h3 id="应用代理配置"><a href="#应用代理配置" class="headerlink" title="应用代理配置"></a>应用代理配置</h3><ul>
 <li><p>方法一</p>
 <ul>
 <li>使用浏览器代理，其它不需要修改即可</li>
@@ -232,7 +250,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h1><ol>
+<h3 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h3><ol>
 <li><p>右键save-》Response-》Response Body到本地文件-》放入M3u8地址</p>
 </li>
 <li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面<img src="https://pic1.zhimg.com/80/v2-f4eb3c975c942624497eba0f0f5a3ec2_720w.jpg?source=1940ef5c" alt="img"></p>
@@ -240,13 +258,17 @@
 <li><p>点击Go</p>
 </li>
 </ol>
-<h1 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h1><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h3><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
 <p>A: 可以先抓出所有 M3U8 链接，有三种方法批量下载：</p>
 <ol>
 <li>将 m3u8 链接每行一个存入一个<code>.txt</code> 文件，然后将文件直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
 <li>将 m3u8 文件存到一个文件夹中，然后将文件夹直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
 </ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
+<h2 id="二、断点调试"><a href="#二、断点调试" class="headerlink" title="二、断点调试"></a>二、断点调试</h2><p>略…</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39883139/article/details/98853135">https://blog.csdn.net/weixin_39883139/article/details/98853135</a></p>
+</blockquote>
 
     </div>
 
@@ -324,7 +346,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">网络配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#N-m3u8DL-CLI-SimpleG%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">N_m3u8DL-CLI-SimpleG下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QA"><span class="nav-number">3.</span> <span class="nav-text">QA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fiddler%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">Fiddler的配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">系统代理设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fiddler%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">Fiddler的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">一、应用使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.1.</span> <span class="nav-text">应用代理配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#N-m3u8DL-CLI-SimpleG%E4%B8%8B%E8%BD%BD"><span class="nav-number">3.1.2.</span> <span class="nav-text">N_m3u8DL-CLI-SimpleG下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QA"><span class="nav-number">3.1.3.</span> <span class="nav-text">QA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95"><span class="nav-number">3.2.</span> <span class="nav-text">二、断点调试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
