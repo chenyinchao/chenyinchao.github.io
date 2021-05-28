@@ -44,20 +44,67 @@ git config --global --unset https.proxy
 ]]></content>
   </entry>
   <entry>
-    <title>【转载】Rxjava学习</title>
-    <url>/2019/12/10/20191210_%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Rxjava%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>Rxjava的特点：链式编程 + 观察者模式 + 异步调度</p>
-<ol>
-<li>什么是观察者模式？</li>
-<li>如何使用Rxjava？</li>
-<li>如何异步调度？</li>
-<li>场景实例</li>
-</ol>
-<p>代码示例：<br><a href="https://github.com/kaka10xiaobang/RxJavaDemo">https://github.com/kaka10xiaobang/RxJavaDemo</a></p>
-<img src="/images/20191210_Rxjava学习.png" class="nofancybox"/>
+    <title>【转载】Git统计代码提交行数</title>
+    <url>/2019/11/22/20191122_%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Git%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4%E8%A1%8C%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="git-commit-stats"><a href="#git-commit-stats" class="headerlink" title="git commit stats"></a>git commit stats</h1><p>Commands to get commit statistics for a Git repository from the command line -<br>using <code>git log</code>, <code>git shortlog</code> and friends.</p>
+<hr>
+
+<h3 id="List-repository-contributors-by-author-name-sorted-by-name"><a href="#List-repository-contributors-by-author-name-sorted-by-name" class="headerlink" title="List repository contributors by author name (sorted by name):"></a>List repository contributors by author name (sorted by name):</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --format=<span class="string">&#x27;%aN&#x27;</span> | sort -u </span><br></pre></td></tr></table></figure>
+
+<p><strong>Example output:</strong></p>
+<pre><code>Jane Bar
+John Foo
+Steve Baz
+</code></pre>
+<hr>
+
+<h3 id="List-total-commits-by-author-sorted-by-commit-count"><a href="#List-total-commits-by-author-sorted-by-commit-count" class="headerlink" title="List total commits by author (sorted by commit count):"></a>List total commits by author (sorted by commit count):</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git shortlog -sn</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example output:</strong></p>
+<pre><code>136 Jane Bar
+ 41 John Foo
+ 17 Steve Baz
+</code></pre>
+<h4 id="Ignore-merge-commits"><a href="#Ignore-merge-commits" class="headerlink" title="Ignore merge commits:"></a>Ignore merge commits:</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git shortlog -sn --no-merges</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example output:</strong></p>
+<pre><code>121 Jane Bar
+ 36 John Foo
+ 14 Steve Baz
+</code></pre>
+<p><em>Even though the <code>--no-merges</code> option is not documented for <code>git shortlog</code>, it works exactly as defined for <code>git log</code>.</em></p>
+<hr>
+
+<h3 id="List-file-change-stats-by-author"><a href="#List-file-change-stats-by-author" class="headerlink" title="List file change stats by author:"></a>List file change stats by author:</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat | awk <span class="string">&#x27;&#123;inserted+=$1; deleted+=$2; delta+=$1-$2; ratio=deleted/inserted&#125; END &#123;printf &quot;Commit stats:\n- Lines added (total)....  %s\n- Lines deleted (total)..  %s\n- Total lines (delta)....  %s\n- Add./Del. ratio (1:n)..  1 : %s\n&quot;, inserted, deleted, delta, ratio &#125;&#x27;</span> -</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example output:</strong></p>
+<pre><code>Commit stats:
+- Lines added (total)....  4625
+- Lines deleted (total)..  836
+- Total lines (delta)....  3789
+- Add./Del. ratio (1:n)..  1 : 0.180757
+</code></pre>
+<h4 id="Include-file-count"><a href="#Include-file-count" class="headerlink" title="Include file count:"></a>Include file count:</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> | grep -E <span class="string">&quot;fil(e|es) changed&quot;</span> | awk <span class="string">&#x27;&#123;files+=$1; inserted+=$4; deleted+=$6; delta+=$4-$6; ratio=deleted/inserted&#125; END &#123;printf &quot;Commit stats:\n- Files changed (total)..  %s\n- Lines added (total)....  %s\n- Lines deleted (total)..  %s\n- Total lines (delta)....  %s\n- Add./Del. ratio (1:n)..  1 : %s\n&quot;, files, inserted, deleted, delta, ratio &#125;&#x27;</span> -</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example output:</strong></p>
+<pre><code>Commit stats:
+- Files changed (total)..  439
+- Lines added (total)....  4625
+- Lines deleted (total)..  836
+- Total lines (delta)....  3789
+- Add./Del. ratio (1:n)..  1 : 0.180757
+</code></pre>
+<h4 id="Ignore-merge-commits-1"><a href="#Ignore-merge-commits-1" class="headerlink" title="Ignore merge commits:"></a>Ignore merge commits:</h4><p>Note: Both commands above also count merge commits. But to ignore them, one can simply use the <code>--no-merges</code> option again:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | awk ...</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | grep -E ...</span><br></pre></td></tr></table></figure>
+
+<h4 id="Filter-stats-by-date"><a href="#Filter-stats-by-date" class="headerlink" title="Filter stats by date:"></a>Filter stats by date:</h4><p>You can filter the output of the above commands, for example, by adding <code>--until</code> or <code>--since</code> or <code>--before</code>:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | awk ...</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | grep -E ...</span><br></pre></td></tr></table></figure>
+
+<br>
+<br>
 
 <blockquote>
-<p>转载于：<br><a href="https://www.jianshu.com/p/cd3557b1a474">https://www.jianshu.com/p/cd3557b1a474</a></p>
+<p>转载于：<br><a href="https://gist.github.com/eyecatchup/3fb7ef0c0cbdb72412fc">https://gist.github.com/eyecatchup/3fb7ef0c0cbdb72412fc</a></p>
 </blockquote>
 ]]></content>
   </entry>
@@ -159,67 +206,20 @@ git commit -m &#39;update .gitignore&#39;
 ]]></content>
   </entry>
   <entry>
-    <title>【转载】Git统计代码提交行数</title>
-    <url>/2019/11/22/20191122_%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Git%E7%BB%9F%E8%AE%A1%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4%E8%A1%8C%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="git-commit-stats"><a href="#git-commit-stats" class="headerlink" title="git commit stats"></a>git commit stats</h1><p>Commands to get commit statistics for a Git repository from the command line -<br>using <code>git log</code>, <code>git shortlog</code> and friends.</p>
-<hr>
-
-<h3 id="List-repository-contributors-by-author-name-sorted-by-name"><a href="#List-repository-contributors-by-author-name-sorted-by-name" class="headerlink" title="List repository contributors by author name (sorted by name):"></a>List repository contributors by author name (sorted by name):</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --format=<span class="string">&#x27;%aN&#x27;</span> | sort -u </span><br></pre></td></tr></table></figure>
-
-<p><strong>Example output:</strong></p>
-<pre><code>Jane Bar
-John Foo
-Steve Baz
-</code></pre>
-<hr>
-
-<h3 id="List-total-commits-by-author-sorted-by-commit-count"><a href="#List-total-commits-by-author-sorted-by-commit-count" class="headerlink" title="List total commits by author (sorted by commit count):"></a>List total commits by author (sorted by commit count):</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git shortlog -sn</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example output:</strong></p>
-<pre><code>136 Jane Bar
- 41 John Foo
- 17 Steve Baz
-</code></pre>
-<h4 id="Ignore-merge-commits"><a href="#Ignore-merge-commits" class="headerlink" title="Ignore merge commits:"></a>Ignore merge commits:</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git shortlog -sn --no-merges</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example output:</strong></p>
-<pre><code>121 Jane Bar
- 36 John Foo
- 14 Steve Baz
-</code></pre>
-<p><em>Even though the <code>--no-merges</code> option is not documented for <code>git shortlog</code>, it works exactly as defined for <code>git log</code>.</em></p>
-<hr>
-
-<h3 id="List-file-change-stats-by-author"><a href="#List-file-change-stats-by-author" class="headerlink" title="List file change stats by author:"></a>List file change stats by author:</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat | awk <span class="string">&#x27;&#123;inserted+=$1; deleted+=$2; delta+=$1-$2; ratio=deleted/inserted&#125; END &#123;printf &quot;Commit stats:\n- Lines added (total)....  %s\n- Lines deleted (total)..  %s\n- Total lines (delta)....  %s\n- Add./Del. ratio (1:n)..  1 : %s\n&quot;, inserted, deleted, delta, ratio &#125;&#x27;</span> -</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example output:</strong></p>
-<pre><code>Commit stats:
-- Lines added (total)....  4625
-- Lines deleted (total)..  836
-- Total lines (delta)....  3789
-- Add./Del. ratio (1:n)..  1 : 0.180757
-</code></pre>
-<h4 id="Include-file-count"><a href="#Include-file-count" class="headerlink" title="Include file count:"></a>Include file count:</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> | grep -E <span class="string">&quot;fil(e|es) changed&quot;</span> | awk <span class="string">&#x27;&#123;files+=$1; inserted+=$4; deleted+=$6; delta+=$4-$6; ratio=deleted/inserted&#125; END &#123;printf &quot;Commit stats:\n- Files changed (total)..  %s\n- Lines added (total)....  %s\n- Lines deleted (total)..  %s\n- Total lines (delta)....  %s\n- Add./Del. ratio (1:n)..  1 : %s\n&quot;, files, inserted, deleted, delta, ratio &#125;&#x27;</span> -</span><br></pre></td></tr></table></figure>
-
-<p><strong>Example output:</strong></p>
-<pre><code>Commit stats:
-- Files changed (total)..  439
-- Lines added (total)....  4625
-- Lines deleted (total)..  836
-- Total lines (delta)....  3789
-- Add./Del. ratio (1:n)..  1 : 0.180757
-</code></pre>
-<h4 id="Ignore-merge-commits-1"><a href="#Ignore-merge-commits-1" class="headerlink" title="Ignore merge commits:"></a>Ignore merge commits:</h4><p>Note: Both commands above also count merge commits. But to ignore them, one can simply use the <code>--no-merges</code> option again:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | awk ...</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | grep -E ...</span><br></pre></td></tr></table></figure>
-
-<h4 id="Filter-stats-by-date"><a href="#Filter-stats-by-date" class="headerlink" title="Filter stats by date:"></a>Filter stats by date:</h4><p>You can filter the output of the above commands, for example, by adding <code>--until</code> or <code>--since</code> or <code>--before</code>:</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --author=<span class="string">&quot;Vorname Nachname&quot;</span> --pretty=tformat: --numstat --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | awk ...</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">$ git <span class="built_in">log</span> --shortstat --author=<span class="string">&quot;Vorname Nachname&quot;</span> --since=<span class="string">&quot;1 Jan, 2015&quot;</span> | grep -E ...</span><br></pre></td></tr></table></figure>
-
-<br>
-<br>
+    <title>【转载】Rxjava学习</title>
+    <url>/2019/12/10/20191210_%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Rxjava%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>Rxjava的特点：链式编程 + 观察者模式 + 异步调度</p>
+<ol>
+<li>什么是观察者模式？</li>
+<li>如何使用Rxjava？</li>
+<li>如何异步调度？</li>
+<li>场景实例</li>
+</ol>
+<p>代码示例：<br><a href="https://github.com/kaka10xiaobang/RxJavaDemo">https://github.com/kaka10xiaobang/RxJavaDemo</a></p>
+<img src="/images/20191210_Rxjava学习.png" class="nofancybox"/>
 
 <blockquote>
-<p>转载于：<br><a href="https://gist.github.com/eyecatchup/3fb7ef0c0cbdb72412fc">https://gist.github.com/eyecatchup/3fb7ef0c0cbdb72412fc</a></p>
+<p>转载于：<br><a href="https://www.jianshu.com/p/cd3557b1a474">https://www.jianshu.com/p/cd3557b1a474</a></p>
 </blockquote>
 ]]></content>
   </entry>
@@ -268,6 +268,25 @@ Steve Baz
 <blockquote>
 <p>参考：<br><a href="https://blog.csdn.net/zy_jibai/article/details/80587083">https://blog.csdn.net/zy_jibai/article/details/80587083</a><br><a href="https://www.v2ex.com/t/618686">https://www.v2ex.com/t/618686</a></p>
 </blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>消息驱动机制</title>
+    <url>/2020/01/09/20200109_%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8%E6%9C%BA%E5%88%B6/</url>
+    <content><![CDATA[<h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><p>可以理解：一个扫描框在Activity里，并且Activity放着2个fragment，从Activity扫描框获取scancode, 并在fragment拿到scancode请求网络</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><ol>
+<li>在Activity里监听扫描框Enter结束作为事件来源</li>
+<li>两个fragment作为观察者实现HandlerSuccessMessage接口</li>
+<li>当在接收到事件来源后，遍历两个fragment并发送消息（接口回调）, 然后在各自fragment实现拿到scancode</li>
+<li>最后在各种fragment过滤filter不是这tab相关的消息</li>
+</ol>
+<p>简而言之，Activity同时发送消息，两个fragment同时接收消息并滤处理</p>
+<blockquote>
+<p>引申，在遍历的时候可以remove观察者集合，即选择性发送消息，起到过滤</p>
+</blockquote>
+<img src="/images/20200109_消息驱动机制.png" class="nofancybox"/>
+
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://blog.csdn.net/wangbin_jxust/article/details/12522269">https://blog.csdn.net/wangbin_jxust/article/details/12522269</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -532,12 +551,6 @@ Steve Baz
 <img src="/images/20200320_转换后端数据场景4.png" class="nofancybox"/>]]></content>
   </entry>
   <entry>
-    <title>常用正则表达式</title>
-    <url>/2020/01/17/20190117_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
-    <content><![CDATA[<h5 id="去掉代码行号"><a href="#去掉代码行号" class="headerlink" title="去掉代码行号"></a>去掉代码行号</h5><p>^\d+</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Android屏幕适配方案</title>
     <url>/2020/04/16/20200411_%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%E8%A7%A3%E6%9E%90/</url>
     <content><![CDATA[<h4 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">px = density * dp;</span><br><span class="line"></span><br><span class="line">density = dpi / 160;</span><br><span class="line"></span><br><span class="line">px = dp * (dpi / 160);</span><br></pre></td></tr></table></figure>
@@ -604,23 +617,51 @@ Steve Baz
 ]]></content>
   </entry>
   <entry>
-    <title>消息驱动机制</title>
-    <url>/2020/01/09/20200109_%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8%E6%9C%BA%E5%88%B6/</url>
-    <content><![CDATA[<h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><p>可以理解：一个扫描框在Activity里，并且Activity放着2个fragment，从Activity扫描框获取scancode, 并在fragment拿到scancode请求网络</p>
-<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><ol>
-<li>在Activity里监听扫描框Enter结束作为事件来源</li>
-<li>两个fragment作为观察者实现HandlerSuccessMessage接口</li>
-<li>当在接收到事件来源后，遍历两个fragment并发送消息（接口回调）, 然后在各自fragment实现拿到scancode</li>
-<li>最后在各种fragment过滤filter不是这tab相关的消息</li>
-</ol>
-<p>简而言之，Activity同时发送消息，两个fragment同时接收消息并滤处理</p>
-<blockquote>
-<p>引申，在遍历的时候可以remove观察者集合，即选择性发送消息，起到过滤</p>
+    <title>装机</title>
+    <url>/2020/04/11/20200411_%E8%A3%85%E6%9C%BA/</url>
+    <content><![CDATA[<h3 id="装机方式"><a href="#装机方式" class="headerlink" title="装机方式"></a>装机方式</h3><ul>
+<li>微PE工具箱</li>
+<li>用UltraISO刻录操作系统到U盘</li>
+</ul>
+<h3 id="BIOS的设置（ThinkPad为例，E、T、X系列）"><a href="#BIOS的设置（ThinkPad为例，E、T、X系列）" class="headerlink" title="BIOS的设置（ThinkPad为例，E、T、X系列）"></a>BIOS的设置（ThinkPad为例，E、T、X系列）</h3><ul>
+<li>在Boot Secure中disable掉</li>
+<li>修改启动模式<ul>
+<li>如果硬盘格式是MBR，BOIS设置启动模式为legacy </li>
+<li>如果硬盘格式是GUID(GPT)，BOIS设置启动模式为UEFI</li>
+</ul>
+</li>
+<li>检测是否能装（在PE中加载镜像，运行镜像中的装机程序）</li>
+</ul>
+<h3 id="分区助手的使用"><a href="#分区助手的使用" class="headerlink" title="分区助手的使用"></a>分区助手的使用</h3><ul>
+<li>C盘扩容，务必在PE下进行</li>
+<li>一种情况，不在PE下进行C盘扩容，可能存在失败，导致C盘打不开，那么用DiskGenius重建C盘，即可找回文件，但恢复C盘状态尚不明确，只好重装操作系统</li>
+</ul>
+<h3 id="MBR与GUID-GPT-格式之间的转换"><a href="#MBR与GUID-GPT-格式之间的转换" class="headerlink" title="MBR与GUID(GPT)格式之间的转换"></a>MBR与GUID(GPT)格式之间的转换</h3><ul>
+<li>用DiskGenius转换盘符，如C盘（无损，不需要清空硬盘数据）</li>
+</ul>
+<h3 id="系统的下载"><a href="#系统的下载" class="headerlink" title="系统的下载"></a>系统的下载</h3><ul>
+<li>MSDN I tell you，下载最最新的OS<blockquote>
+<p>存在的情况，E485电脑是AMD 2500u，如果用cn_windows_10_ultimate_x86_dvd.iso会导致非常频繁的死机、蓝屏，如果用最新的cn_windows_10_consumer_editions_version_1909_updated_jan_2020_x64_dvd_47161f17.iso则不会死机、蓝屏</p>
 </blockquote>
-<img src="/images/20200109_消息驱动机制.png" class="nofancybox"/>
-
-<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="https://blog.csdn.net/wangbin_jxust/article/details/12522269">https://blog.csdn.net/wangbin_jxust/article/details/12522269</a></p>
+</li>
+</ul>
+<h3 id="驱动安装"><a href="#驱动安装" class="headerlink" title="驱动安装"></a>驱动安装</h3><ul>
+<li>下载鲁大师（里面基于360驱动助手）</li>
+<li>或下载360驱动助手万能网卡版</li>
+</ul>
 ]]></content>
+  </entry>
+  <entry>
+    <title>开通个人博客</title>
+    <url>/2019/10/23/20191023_%E5%BC%80%E9%80%9A%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>基于Github Pages + Hexo + NexT theme </p>
+<p>备份：<br>    默认当前是hexo分支，当hexo d提交到master分支后，再git提交到hexo分支<br>    <a href="https://www.zhihu.com/question/21193762">https://www.zhihu.com/question/21193762</a> (见下图)</p>
+<p><strong>其中hexo分支提交生成工具，master分支提交生成静态页index.html</strong></p>
+<blockquote>
+<p>参考资料：<br>国内npm阿里镜像：<br><a href="https://npm.taobao.org/">https://npm.taobao.org/</a></p>
+<p>hexo-theme-next文档：<br><a href="http://theme-next.iissnan.com/getting-started.html">http://theme-next.iissnan.com/getting-started.html</a></p>
+</blockquote>
+<img src="/images/20191023_开通个人博客.png" class="nofancybox"/>]]></content>
   </entry>
   <entry>
     <title>数据结构与算法-绪论</title>
@@ -711,38 +752,22 @@ Steve Baz
 ]]></content>
   </entry>
   <entry>
-    <title>装机</title>
-    <url>/2020/04/11/20200411_%E8%A3%85%E6%9C%BA/</url>
-    <content><![CDATA[<h3 id="装机方式"><a href="#装机方式" class="headerlink" title="装机方式"></a>装机方式</h3><ul>
-<li>微PE工具箱</li>
-<li>用UltraISO刻录操作系统到U盘</li>
-</ul>
-<h3 id="BIOS的设置（ThinkPad为例，E、T、X系列）"><a href="#BIOS的设置（ThinkPad为例，E、T、X系列）" class="headerlink" title="BIOS的设置（ThinkPad为例，E、T、X系列）"></a>BIOS的设置（ThinkPad为例，E、T、X系列）</h3><ul>
-<li>在Boot Secure中disable掉</li>
-<li>修改启动模式<ul>
-<li>如果硬盘格式是MBR，BOIS设置启动模式为legacy </li>
-<li>如果硬盘格式是GUID(GPT)，BOIS设置启动模式为UEFI</li>
-</ul>
+    <title>gradle下载</title>
+    <url>/2020/08/15/20200815_gradle%E4%B8%8B%E8%BD%BD/</url>
+    <content><![CDATA[<ol>
+<li><p>新建 gradle.properties 文件，加上 <code>org.gradle.jvmargs=-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=10808</code></p>
 </li>
-<li>检测是否能装（在PE中加载镜像，运行镜像中的装机程序）</li>
-</ul>
-<h3 id="分区助手的使用"><a href="#分区助手的使用" class="headerlink" title="分区助手的使用"></a>分区助手的使用</h3><ul>
-<li>C盘扩容，务必在PE下进行</li>
-<li>一种情况，不在PE下进行C盘扩容，可能存在失败，导致C盘打不开，那么用DiskGenius重建C盘，即可找回文件，但恢复C盘状态尚不明确，只好重装操作系统</li>
-</ul>
-<h3 id="MBR与GUID-GPT-格式之间的转换"><a href="#MBR与GUID-GPT-格式之间的转换" class="headerlink" title="MBR与GUID(GPT)格式之间的转换"></a>MBR与GUID(GPT)格式之间的转换</h3><ul>
-<li>用DiskGenius转换盘符，如C盘（无损，不需要清空硬盘数据）</li>
-</ul>
-<h3 id="系统的下载"><a href="#系统的下载" class="headerlink" title="系统的下载"></a>系统的下载</h3><ul>
-<li>MSDN I tell you，下载最最新的OS<blockquote>
-<p>存在的情况，E485电脑是AMD 2500u，如果用cn_windows_10_ultimate_x86_dvd.iso会导致非常频繁的死机、蓝屏，如果用最新的cn_windows_10_consumer_editions_version_1909_updated_jan_2020_x64_dvd_47161f17.iso则不会死机、蓝屏</p>
-</blockquote>
+<li><p>如下图设置</p>
+<img src="/images/20200815_gradle下载.jpg" class="nofancybox"/></li>
+<li><p>Android studio Connection refused: connect<br>因为手动设置过一次代理后 studio 就会在 C 盘里面生成一个代理文件，而后 studio 每次编译都会去读取 C 盘路径的文件，删除 C:\Users\pc.gradle 路径下面的 gradle.properties 文件</p>
 </li>
-</ul>
-<h3 id="驱动安装"><a href="#驱动安装" class="headerlink" title="驱动安装"></a>驱动安装</h3><ul>
-<li>下载鲁大师（里面基于360驱动助手）</li>
-<li>或下载360驱动助手万能网卡版</li>
-</ul>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>常用正则表达式</title>
+    <url>/2020/01/17/20190117_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
+    <content><![CDATA[<h5 id="去掉代码行号"><a href="#去掉代码行号" class="headerlink" title="去掉代码行号"></a>去掉代码行号</h5><p>^\d+</p>
 ]]></content>
   </entry>
   <entry>
@@ -754,24 +779,24 @@ Steve Baz
 ]]></content>
   </entry>
   <entry>
+    <title>intellij插件开发，一键遍历，一键提取，一键翻译，一键生成，一键搞定</title>
+    <url>/2020/09/18/20200918_intellij%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="comment">//返回此项目下的所有子文件</span></span><br><span class="line">VirtualFile[] children = project.getBaseDir().getChildren();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">(VirtualFile[] children)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (VirtualFile child : children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!child.getName().equals(<span class="string">&quot;文件夹名&quot;</span>)) &#123;</span><br><span class="line">                <span class="comment">// 1. 递归找java名称的文件夹</span></span><br><span class="line">                handle(child.getChildren());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 2. 找到了java名称的文件夹，再次递归</span></span><br><span class="line">                handle2(child.getChildren());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">(VirtualFile[] children)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (VirtualFile child : children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (child.getName().endsWith(<span class="string">&quot;.java&quot;</span>)) &#123;</span><br><span class="line">                layoutName = child.getName();</span><br><span class="line">                System.out.println(<span class="string">&quot;第&quot;</span> + cout++ + <span class="string">&quot;个：&quot;</span> + layoutName);</span><br><span class="line">                <span class="comment">// 处理所有的.java文件</span></span><br><span class="line">                handLayout(layoutName);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                handle2(child.getChildren());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 遍历当前文件找到字符串</span></span><br><span class="line">StringReader inReader = <span class="keyword">new</span> StringReader(file.getText());</span><br><span class="line">BufferedReader bufReader = <span class="keyword">new</span> BufferedReader(inReader);</span><br><span class="line">String packageName = <span class="string">&quot;&quot;</span>;</span><br><span class="line">String lineText;</span><br><span class="line"><span class="keyword">while</span> ((lineText = bufReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 获取包名，以包名作为key的命名规则，package com.ycc.abnormalcall.activity;</span></span><br><span class="line">    String pg = <span class="string">&quot;package com.ycc.&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (lineText.contains(pg)) &#123;</span><br><span class="line">        <span class="comment">// abnormalcall.activity;</span></span><br><span class="line">        String substring = lineText.substring(pg.length());</span><br><span class="line">        <span class="keyword">if</span> (substring.endsWith(<span class="string">&quot;;&quot;</span>)) &#123;</span><br><span class="line">            substring = substring.replace(<span class="string">&quot;;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String[] split = substring.split(<span class="string">&quot;\\.&quot;</span>);</span><br><span class="line">        <span class="comment">// abnormalcall</span></span><br><span class="line">        packageName = split[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配括弧里面的中英文 (&quot;&quot;)</span></span><br><span class="line">    String reg = <span class="string">&quot;\\(\\\&quot;.*[\\u4e00-\\u9fa5]+.*\\\&quot;\\)&quot;</span>;</span><br><span class="line">    Matcher matcher = Pattern.compile(reg).matcher(lineText);</span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        <span class="comment">//(&quot;异常呼入&quot;)</span></span><br><span class="line">        <span class="comment">//(&quot;容器号LPN不能为空&quot;)</span></span><br><span class="line">        String group = matcher.group(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 匹配 ---》 取出双引号的内容</span></span><br><span class="line">        String p = <span class="string">&quot;\&quot;([^\&quot;]*)\&quot;&quot;</span>;</span><br><span class="line">        Matcher m1 = Pattern.compile(p).matcher(group);</span><br><span class="line">        <span class="keyword">if</span> (m1.find()) &#123;</span><br><span class="line">            String group1 = m1.group(<span class="number">0</span>);</span><br><span class="line">            <span class="comment">// $1, 取出正则表达式第一个括弧内容</span></span><br><span class="line">            String word = group1.replaceAll(p, <span class="string">&quot;$1&quot;</span>);</span><br><span class="line">            <span class="comment">//异常呼入</span></span><br><span class="line">            <span class="comment">//容器号LPN不能为空</span></span><br><span class="line">            System.out.println(word);</span><br><span class="line">            soureces.add(word);</span><br><span class="line">            String key = packageName + <span class="string">&quot;_&quot;</span>;</span><br><span class="line">            dataBeans.add(<span class="keyword">new</span> DataBean(key, word));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        flag = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">bufReader.close();</span><br><span class="line">inReader.close();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 翻译</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">translate</span><span class="params">(PsiFile file, List&lt;String&gt; sources, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">flag = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">new</span> GetTranslationTask(project, <span class="string">&quot;翻译中&quot;</span>, sources, result -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dataBeans.size(); i++) &#123;</span><br><span class="line">            DataBean dataBean = dataBeans.get(i);</span><br><span class="line">            String str = dataBean.getKey() + StringUtils.formatStr(result.get(i));</span><br><span class="line">            dataBean.setKey(str);</span><br><span class="line">        &#125;</span><br><span class="line">        handResult(file, dataBeans);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        showDialog(<span class="string">&quot;翻译异常&quot;</span>, <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).setCancelText(<span class="string">&quot;Translation Has Been Canceled&quot;</span>).queue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 拼接写入字符串的内容</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getShowContent</span><span class="params">(List&lt;DataBean&gt; attributeValues, String stringPath)</span> </span>&#123;</span><br><span class="line">    StringBuilder block = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    block.append(<span class="string">&quot;&lt;!--################ &quot;</span>).append(layoutName).append(<span class="string">&quot; start ################--&gt;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (DataBean dataBean : attributeValues) &#123;</span><br><span class="line">        <span class="comment">// 处理key值</span></span><br><span class="line">        String keyStr = dataBean.getKey();</span><br><span class="line">        <span class="comment">// [\pP+~$`^=|&lt;&gt;～｀＄＾＋＝｜＜＞￥×]	匹配字母或数字或下划线 --&gt; 过滤掉特殊符号 &amp;!</span></span><br><span class="line">        String ss = keyStr.replaceAll(<span class="string">&quot;[\\pP+~$`^=|&lt;&gt;～｀＄＾＋＝｜＜＞￥×]&quot;</span>, <span class="string">&quot;_&quot;</span>);</span><br><span class="line">        <span class="comment">// 是否有重复的key和value</span></span><br><span class="line">        <span class="keyword">if</span> (isRepeat(ss, stringPath)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        block.append(<span class="string">&quot;&lt;string name=\&quot;&quot;</span>);</span><br><span class="line">        block.append(ss);</span><br><span class="line">        block.append(<span class="string">&quot;\&quot;&gt;&quot;</span>);</span><br><span class="line">        <span class="comment">// 处理value值</span></span><br><span class="line">        <span class="keyword">if</span> (stringPath.contains(<span class="string">&quot;values-zh-rCN&quot;</span>)) &#123;</span><br><span class="line">            block.append(dataBean.getValue());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            String key = dataBean.getKey();</span><br><span class="line"><span class="comment">//                String str = &quot;layout_&quot;;</span></span><br><span class="line"><span class="comment">//                int startIndex = key.indexOf(str) + str.length();</span></span><br><span class="line"><span class="comment">//                String substring = key.substring(startIndex);</span></span><br><span class="line">            String substring = key.substring(key.indexOf(<span class="string">&quot;_&quot;</span>) + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (substring.contains(<span class="string">&quot;_&quot;</span>)) &#123;</span><br><span class="line">                String[] s = substring.split(<span class="string">&quot;_&quot;</span>);</span><br><span class="line">                <span class="keyword">for</span> (String value : s) &#123;</span><br><span class="line">                    block.append(value).append(<span class="string">&quot; &quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                block.deleteCharAt(block.length() - <span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                block.append(substring);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        block.append(<span class="string">&quot;&lt;/string&gt;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    block.append(<span class="string">&quot;&lt;!--################ &quot;</span>).append(layoutName).append(<span class="string">&quot; end ################--&gt;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> block.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 修改java代码里面的字符串</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">changeXml</span><span class="params">(PsiFile file, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">    WriteCommandAction.runWriteCommandAction(project, () -&gt; &#123;</span><br><span class="line">        VirtualFile virtualFile = file.getVirtualFile();</span><br><span class="line">        Document document = FileDocumentManager.getInstance().getDocument(virtualFile);</span><br><span class="line">        <span class="keyword">if</span> (document != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String text = document.getText();</span><br><span class="line">            <span class="keyword">for</span> (DataBean attributeValue : dataBeans) &#123;</span><br><span class="line">                text = text.replace(<span class="string">&quot;\&quot;&quot;</span> + attributeValue.getValue() + <span class="string">&quot;\&quot;&quot;</span>, <span class="string">&quot;R.string.&quot;</span> + attributeValue.getKey());</span><br><span class="line">            &#125;</span><br><span class="line">            document.setText(text);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 往strings.xml中写内容</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeContentXml</span><span class="params">(String stringPath, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//获取内容</span></span><br><span class="line">    String content = getShowContent(dataBeans, stringPath);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// String stringPath = project.getBasePath() + &quot;/app/src/main/res/values/strings.xml&quot;;</span></span><br><span class="line">        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(stringPath);</span><br><span class="line">        <span class="keyword">if</span> (virtualFile != <span class="keyword">null</span>) &#123;</span><br><span class="line">            Runnable runnable = () -&gt; &#123;</span><br><span class="line">                Document document = FileDocumentManager.getInstance().getDocument(virtualFile);</span><br><span class="line">                <span class="keyword">if</span> (document != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">int</span> lineCount = document.getLineCount();</span><br><span class="line">                    <span class="keyword">int</span> lineNumber = document.getLineStartOffset(lineCount - <span class="number">1</span>);</span><br><span class="line">                    document.insertString(lineNumber, content);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            WriteCommandAction.runWriteCommandAction(project, runnable);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            showDialog(<span class="string">&quot;strings.xml文件没找到&quot;</span>, <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
     <title>RxJava全局异常处理</title>
     <url>/2020/10/29/20201027_RxJava%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">RxJava事件通过.subscribe进行订阅，在subscribe方法中，最终传到LambdaObserver类中</span><br><span class="line">LambdaObserver&lt;T&gt; ls = <span class="keyword">new</span> LambdaObserver&lt;T&gt;(onNext, onError, onComplete, onSubscribe);</span><br><span class="line"></span><br><span class="line">在LambdaObserver中，所有的事件都进行了<span class="keyword">try</span>...<span class="keyword">catch</span>，最终oNext抛出的异常都流转到onError方法中，若onError抛出异常则最终流转到RxJavaPlugins.onError中处理;即在在BaseApplication.java中进行异常处理。</span><br><span class="line">其中，当在onError中抛出异常，则走到RxJavaPlugins.onError(<span class="keyword">new</span> CompositeException(t, e));这里会进行遍历打印所有的异常，属于异常中的异常，即抛出CompositeException</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!isDisposed()) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                onNext.accept(t);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                Exceptions.throwIfFatal(e);</span><br><span class="line">                get().dispose();</span><br><span class="line">                onError(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!isDisposed()) &#123;</span><br><span class="line">            lazySet(DisposableHelper.DISPOSED);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                onError.accept(t);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                Exceptions.throwIfFatal(e);</span><br><span class="line">                RxJavaPlugins.onError(<span class="keyword">new</span> CompositeException(t, e));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            RxJavaPlugins.onError(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">在BaseApplication.java中进行全局异常处理</span><br><span class="line"> RxJavaPlugins.setErrorHandler(throwable -&gt; &#123;</span><br><span class="line">            StringBuffer stringBuffer = <span class="keyword">new</span> StringBuffer(<span class="string">&quot;全局异常，所有CompositeException异常:&quot;</span>);</span><br><span class="line">            LogUtils.e(<span class="string">&quot;全局异常：setErrorHandler ---&gt; throwable name: &quot;</span> + throwable.getClass().getName());</span><br><span class="line">            <span class="keyword">if</span> (throwable <span class="keyword">instanceof</span> CompositeException) &#123;</span><br><span class="line">                List&lt;Throwable&gt; exceptions = ((CompositeException)throwable).getExceptions();</span><br><span class="line">                <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">for</span> (Throwable exception : exceptions) &#123;</span><br><span class="line">                    stringBuffer.append(<span class="string">&quot; &quot;</span>).append(i++).append(<span class="string">&quot;、&quot;</span>).append(exception.getClass().getName());</span><br><span class="line">                    <span class="keyword">if</span> (!(exception <span class="keyword">instanceof</span> ParseException)) &#123;</span><br><span class="line">                        LogUtils.e(exception);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 打印所有CompositeException异常</span></span><br><span class="line">                LogUtils.e(stringBuffer);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                LogUtils.e(throwable);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 代码问题，非业务逻辑异常</span></span><br><span class="line">            ToastUtils.showShort(<span class="string">&quot;Non-business logic exception&quot;</span>);</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>Android模拟点击事件脚本</title>
-    <url>/2020/10/29/20201029_Android%E6%A8%A1%E6%8B%9F%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h2 id="模拟操作修改wifi代理，便于切换代理fiddler抓包"><a href="#模拟操作修改wifi代理，便于切换代理fiddler抓包" class="headerlink" title="模拟操作修改wifi代理，便于切换代理fiddler抓包"></a>模拟操作修改wifi代理，便于切换代理fiddler抓包</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 返回主界面</span></span><br><span class="line">adb shell input keyevent <span class="number">3</span></span><br><span class="line"><span class="comment">// 打开WiFi设置界面</span></span><br><span class="line">adb shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings</span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按</span></span><br><span class="line">adb shell input swipe startX startY startX startY <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 滑动解锁</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">1000</span> <span class="number">300</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按，两个坐标一样，长按时间ms</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">260</span> <span class="number">300</span> <span class="number">260</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟鼠标点击操作</span></span><br><span class="line">adb shell input mouse tap <span class="number">300</span> <span class="number">440</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按全选</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">260</span> <span class="number">300</span> <span class="number">260</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 全选删除</span></span><br><span class="line">adb shell input keyevent <span class="number">67</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输入字符 192.168.43.231</span></span><br><span class="line">adb shell input text <span class="number">192.168</span><span class="number">.43</span><span class="number">.231</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 向上滑</span></span><br><span class="line">adb shell input touchscreen swipe <span class="number">300</span> <span class="number">188</span> <span class="number">300</span> <span class="number">38</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟鼠标点击操作 --》 点击端口</span></span><br><span class="line">adb shell input mouse tap <span class="number">300</span> <span class="number">210</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按全选</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">210</span> <span class="number">300</span> <span class="number">210</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 全选删除</span></span><br><span class="line">adb shell input keyevent <span class="number">67</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输入字符 192.168.43.231</span></span><br><span class="line">adb shell input text <span class="number">8888</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 点击保存</span></span><br><span class="line">adb shell input mouse tap <span class="number">280</span> <span class="number">425</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 其它</span></span><br><span class="line">开启飞行模式：<span class="function">adb shell settings put global <span class="title">airplane_mode_on</span> <span class="params">(<span class="number">0</span>==关闭，<span class="number">1</span>==开启)</span></span></span><br><span class="line"><span class="function">清除应用数据与缓存: adb shell pm clear cn.com.test.mobile</span></span><br><span class="line"><span class="function">启动应用: adb shell am start -n cn.com.test.mobile/.ui.SplashActivity </span></span><br><span class="line"><span class="function">停止应用：adb shell am force-stop cn.com.test.mobile</span></span><br><span class="line"><span class="function">获取系统默认输入法：adb shell settings get secure default_input_method</span></span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>AndroidStudio自定义模板MVP templates制作</title>
-    <url>/2020/11/04/20201104_AndroidStudio%20MVP%E6%A8%A1%E6%9D%BF%E5%88%B6%E4%BD%9C/</url>
-    <content><![CDATA[<p>放入AS模板路径下： plugins\android\lib\templates\activities </p>
-<blockquote>
-<p>github 地址：<br><a href="https://github.com/chenyinchao/MVP-templates">https://github.com/chenyinchao/MVP-templates</a></p>
-</blockquote>
 ]]></content>
   </entry>
   <entry>
@@ -790,35 +815,80 @@ Steve Baz
 ]]></content>
   </entry>
   <entry>
+    <title>Android模拟点击事件脚本</title>
+    <url>/2020/10/29/20201029_Android%E6%A8%A1%E6%8B%9F%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="模拟操作修改wifi代理，便于切换代理fiddler抓包"><a href="#模拟操作修改wifi代理，便于切换代理fiddler抓包" class="headerlink" title="模拟操作修改wifi代理，便于切换代理fiddler抓包"></a>模拟操作修改wifi代理，便于切换代理fiddler抓包</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 返回主界面</span></span><br><span class="line">adb shell input keyevent <span class="number">3</span></span><br><span class="line"><span class="comment">// 打开WiFi设置界面</span></span><br><span class="line">adb shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings</span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按</span></span><br><span class="line">adb shell input swipe startX startY startX startY <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 滑动解锁</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">1000</span> <span class="number">300</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按，两个坐标一样，长按时间ms</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">260</span> <span class="number">300</span> <span class="number">260</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟鼠标点击操作</span></span><br><span class="line">adb shell input mouse tap <span class="number">300</span> <span class="number">440</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按全选</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">260</span> <span class="number">300</span> <span class="number">260</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 全选删除</span></span><br><span class="line">adb shell input keyevent <span class="number">67</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输入字符 192.168.43.231</span></span><br><span class="line">adb shell input text <span class="number">192.168</span><span class="number">.43</span><span class="number">.231</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 向上滑</span></span><br><span class="line">adb shell input touchscreen swipe <span class="number">300</span> <span class="number">188</span> <span class="number">300</span> <span class="number">38</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟鼠标点击操作 --》 点击端口</span></span><br><span class="line">adb shell input mouse tap <span class="number">300</span> <span class="number">210</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 长按全选</span></span><br><span class="line">adb shell input swipe <span class="number">300</span> <span class="number">210</span> <span class="number">300</span> <span class="number">210</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 全选删除</span></span><br><span class="line">adb shell input keyevent <span class="number">67</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输入字符 192.168.43.231</span></span><br><span class="line">adb shell input text <span class="number">8888</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 点击保存</span></span><br><span class="line">adb shell input mouse tap <span class="number">280</span> <span class="number">425</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 其它</span></span><br><span class="line">开启飞行模式：<span class="function">adb shell settings put global <span class="title">airplane_mode_on</span> <span class="params">(<span class="number">0</span>==关闭，<span class="number">1</span>==开启)</span></span></span><br><span class="line"><span class="function">清除应用数据与缓存: adb shell pm clear cn.com.test.mobile</span></span><br><span class="line"><span class="function">启动应用: adb shell am start -n cn.com.test.mobile/.ui.SplashActivity </span></span><br><span class="line"><span class="function">停止应用：adb shell am force-stop cn.com.test.mobile</span></span><br><span class="line"><span class="function">获取系统默认输入法：adb shell settings get secure default_input_method</span></span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>AndroidStudio自定义模板MVP templates制作</title>
+    <url>/2020/11/04/20201104_AndroidStudio%20MVP%E6%A8%A1%E6%9D%BF%E5%88%B6%E4%BD%9C/</url>
+    <content><![CDATA[<p>放入AS模板路径下： plugins\android\lib\templates\activities </p>
+<blockquote>
+<p>github 地址：<br><a href="https://github.com/chenyinchao/MVP-templates">https://github.com/chenyinchao/MVP-templates</a></p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
     <title>Chrome Stylus对CSDN的样式修改</title>
     <url>/2020/11/04/20201104_Chrome%20Stylus%E5%AF%B9CSDN%E7%9A%84%E6%A0%B7%E5%BC%8F%E4%BF%AE%E6%94%B9/</url>
     <content><![CDATA[<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#csdn-toolbar</span>,</span><br><span class="line"><span class="selector-class">.article-info-box</span>,</span><br><span class="line"><span class="selector-class">.hide-article-box</span>,</span><br><span class="line"><span class="selector-class">.blog-expert-recommend-box</span>,</span><br><span class="line"><span class="selector-class">.recommend-item-box</span><span class="selector-class">.type_hot_word</span>,</span><br><span class="line"><span class="selector-class">.recommend-ad-box</span>,</span><br><span class="line"><span class="selector-class">.isGreatIcon</span>,</span><br><span class="line"><span class="selector-class">.tool-box</span>,</span><br><span class="line"><span class="selector-class">.meau-gotop-box</span>,</span><br><span class="line"><span class="selector-class">.more-toolbox</span>,</span><br><span class="line"><span class="selector-class">.recommend-end-box</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: none <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: source-han-serif-tc, -apple-system, BlinkMacSystemFont, <span class="string">&quot;Segoe UI&quot;</span>,</span><br><span class="line">    Roboto, Oxygen, Ubuntu, Cantarell, <span class="string">&quot;Fira Sans&quot;</span>, <span class="string">&quot;Droid Sans&quot;</span>, <span class="string">&quot;Helvetica Neue&quot;</span>,</span><br><span class="line">    sans-serif <span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">min-width</span>: unset;</span><br><span class="line">  <span class="attribute">background</span>: none <span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>, <span class="number">0.8</span>) <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#article_content</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#mainBox</span> &#123;</span><br><span class="line">  <span class="attribute">margin-left</span>: auto;</span><br><span class="line">  <span class="attribute">margin-right</span>: auto;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">60%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#mainBox</span> &gt; <span class="selector-tag">main</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: block <span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">float</span>: none;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#mainBox</span> &gt; <span class="selector-tag">aside</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: unset <span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">float</span>: none;</span><br><span class="line">  <span class="attribute">display</span>: none <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.pulllog-box</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: none <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.recommend-box</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-wrap</span>: wrap;</span><br><span class="line">  <span class="attribute">background</span>: white;</span><br><span class="line">  <span class="attribute">padding-top</span>: <span class="number">3rem</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.recommend-box</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&quot;相关文章&quot;</span>;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">1rem</span>;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">1.3rem</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">1rem</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.recommend-item-box</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">25rem</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.recommend-item-box</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: none;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.recommend-item-box</span> <span class="selector-class">.content</span>,</span><br><span class="line"><span class="selector-class">.recommend-item-box</span> <span class="selector-tag">h4</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span> <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.blog_title_box</span><span class="selector-class">.oneline</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
-    <title>gradle下载</title>
-    <url>/2020/08/15/20200815_gradle%E4%B8%8B%E8%BD%BD/</url>
-    <content><![CDATA[<ol>
-<li><p>新建 gradle.properties 文件，加上 <code>org.gradle.jvmargs=-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=10808</code></p>
+    <title>Fiddler</title>
+    <url>/2021/05/28/20210528_Fiddler/</url>
+    <content><![CDATA[<h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="/images/fiddler/20210528_fiddler_1.jpg"></p>
+<ol>
+<li><p>在HTTPS选项卡Actions上，选择<code>Trust Root Certificate</code>安装证书</p>
+<p><img src="/images/fiddler/20210528_fiddler_2.png"></p>
 </li>
-<li><p>如下图设置</p>
-<img src="/images/20200815_gradle下载.jpg" class="nofancybox"/></li>
-<li><p>Android studio Connection refused: connect<br>因为手动设置过一次代理后 studio 就会在 C 盘里面生成一个代理文件，而后 studio 每次编译都会去读取 C 盘路径的文件，删除 C:\Users\pc.gradle 路径下面的 gradle.properties 文件</p>
+<li><p>左下角模式为Captuing，选项栏勾选<code>Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）</code>和<code>Decode（解压请求）</code></p>
+</li>
+<li><p>在右侧Filters选项卡，按条件使用，如Show only if URL contains填入.m3u8，或Ctrl+F搜索m3u8</p>
 </li>
 </ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>开通个人博客</title>
-    <url>/2019/10/23/20191023_%E5%BC%80%E9%80%9A%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>基于Github Pages + Hexo + NexT theme </p>
-<p>备份：<br>    默认当前是hexo分支，当hexo d提交到master分支后，再git提交到hexo分支<br>    <a href="https://www.zhihu.com/question/21193762">https://www.zhihu.com/question/21193762</a> (见下图)</p>
-<p><strong>其中hexo分支提交生成工具，master分支提交生成静态页index.html</strong></p>
-<blockquote>
-<p>参考资料：<br>国内npm阿里镜像：<br><a href="https://npm.taobao.org/">https://npm.taobao.org/</a></p>
-<p>hexo-theme-next文档：<br><a href="http://theme-next.iissnan.com/getting-started.html">http://theme-next.iissnan.com/getting-started.html</a></p>
+<h1 id="系统代理设置"><a href="#系统代理设置" class="headerlink" title="系统代理设置"></a>系统代理设置</h1><p>IE浏览器打开Internet选项，修改<code>局域网设置</code></p>
+<ol>
+<li>勾选<code>为LAN使用代理服务器</code>，并配置地址为127.0.0.1，端口8888</li>
+<li>关闭自动配置，<code>自动检测设置</code>，<code>使用自动配置脚本</code></li>
+</ol>
+<p>如Chrome使用了SwitchyOmega，修改成<code>系统代理</code></p>
+<h1 id="Fiddler的应用"><a href="#Fiddler的应用" class="headerlink" title="Fiddler的应用"></a>Fiddler的应用</h1><h2 id="一、应用使用"><a href="#一、应用使用" class="headerlink" title="一、应用使用"></a>一、应用使用</h2><h3 id="应用代理配置"><a href="#应用代理配置" class="headerlink" title="应用代理配置"></a>应用代理配置</h3><ul>
+<li><p>方法一</p>
+<ul>
+<li>使用浏览器代理，其它不需要修改即可</li>
+</ul>
+</li>
+<li><p>方法二</p>
+<ul>
+<li>类型：HTTP代理</li>
+<li>地址：127.0.0.1</li>
+<li>端口：8888</li>
+</ul>
+</li>
+</ul>
+<h3 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h3><ol>
+<li><p>右键save-》Response-》Response Body到本地文件-》放入M3u8地址</p>
+</li>
+<li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面</p>
+<p><img src="/images/fiddler/20210528_fiddler_3.jpg"></p>
+</li>
+<li><p>点击Go</p>
+</li>
+</ol>
+<h3 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h3><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
+<p>A: 可以先抓出所有 M3U8 链接，有三种方法批量下载：</p>
+<ol>
+<li>将 m3u8 链接每行一个存入一个<code>.txt</code> 文件，然后将文件直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
+<li>将 m3u8 文件存到一个文件夹中，然后将文件夹直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
+</ol>
+<h2 id="二、断点调试"><a href="#二、断点调试" class="headerlink" title="二、断点调试"></a>二、断点调试</h2><p>略…</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
+<p><a href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
+<p><a href="https://blog.csdn.net/weixin_39883139/article/details/98853135">https://blog.csdn.net/weixin_39883139/article/details/98853135</a></p>
 </blockquote>
-<img src="/images/20191023_开通个人博客.png" class="nofancybox"/>]]></content>
+]]></content>
   </entry>
   <entry>
     <title>Pain is temporary, but quitting lasts forever.</title>
@@ -874,76 +944,6 @@ Steve Baz
 <p>参考链接：<br><a href="http://www.imooc.com/wenda/detail/561230">http://www.imooc.com/wenda/detail/561230</a><br>Github上issues：<br><a href="https://github.com/http-party/http-server/issues/525">https://github.com/http-party/http-server/issues/525</a></p>
 <blockquote>
 <p>搭建Http-Server 是一个简单的零配置的命令行 http服务器，它足够强大便于生产和使用，用于本地测试和开发，手机访问电脑共享。<br>很多时候需要局域网共享文件，有些大文件也没法用微信/qq传，或者是从服务器上需要下载文件到本地scp会很慢，如果用python -m SimpleHTTPServer 会发现服务器性能很差，且不支持并发下载。这时就可以用http-server。</p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title>intellij插件开发，一键遍历，一键提取，一键翻译，一键生成，一键搞定</title>
-    <url>/2020/09/18/20200918_intellij%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="comment">//返回此项目下的所有子文件</span></span><br><span class="line">VirtualFile[] children = project.getBaseDir().getChildren();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">(VirtualFile[] children)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (VirtualFile child : children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!child.getName().equals(<span class="string">&quot;文件夹名&quot;</span>)) &#123;</span><br><span class="line">                <span class="comment">// 1. 递归找java名称的文件夹</span></span><br><span class="line">                handle(child.getChildren());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 2. 找到了java名称的文件夹，再次递归</span></span><br><span class="line">                handle2(child.getChildren());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handle2</span><span class="params">(VirtualFile[] children)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (VirtualFile child : children) &#123;</span><br><span class="line">            <span class="keyword">if</span> (child.getName().endsWith(<span class="string">&quot;.java&quot;</span>)) &#123;</span><br><span class="line">                layoutName = child.getName();</span><br><span class="line">                System.out.println(<span class="string">&quot;第&quot;</span> + cout++ + <span class="string">&quot;个：&quot;</span> + layoutName);</span><br><span class="line">                <span class="comment">// 处理所有的.java文件</span></span><br><span class="line">                handLayout(layoutName);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                handle2(child.getChildren());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 遍历当前文件找到字符串</span></span><br><span class="line">StringReader inReader = <span class="keyword">new</span> StringReader(file.getText());</span><br><span class="line">BufferedReader bufReader = <span class="keyword">new</span> BufferedReader(inReader);</span><br><span class="line">String packageName = <span class="string">&quot;&quot;</span>;</span><br><span class="line">String lineText;</span><br><span class="line"><span class="keyword">while</span> ((lineText = bufReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 获取包名，以包名作为key的命名规则，package com.ycc.abnormalcall.activity;</span></span><br><span class="line">    String pg = <span class="string">&quot;package com.ycc.&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (lineText.contains(pg)) &#123;</span><br><span class="line">        <span class="comment">// abnormalcall.activity;</span></span><br><span class="line">        String substring = lineText.substring(pg.length());</span><br><span class="line">        <span class="keyword">if</span> (substring.endsWith(<span class="string">&quot;;&quot;</span>)) &#123;</span><br><span class="line">            substring = substring.replace(<span class="string">&quot;;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        String[] split = substring.split(<span class="string">&quot;\\.&quot;</span>);</span><br><span class="line">        <span class="comment">// abnormalcall</span></span><br><span class="line">        packageName = split[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 匹配括弧里面的中英文 (&quot;&quot;)</span></span><br><span class="line">    String reg = <span class="string">&quot;\\(\\\&quot;.*[\\u4e00-\\u9fa5]+.*\\\&quot;\\)&quot;</span>;</span><br><span class="line">    Matcher matcher = Pattern.compile(reg).matcher(lineText);</span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        <span class="comment">//(&quot;异常呼入&quot;)</span></span><br><span class="line">        <span class="comment">//(&quot;容器号LPN不能为空&quot;)</span></span><br><span class="line">        String group = matcher.group(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 匹配 ---》 取出双引号的内容</span></span><br><span class="line">        String p = <span class="string">&quot;\&quot;([^\&quot;]*)\&quot;&quot;</span>;</span><br><span class="line">        Matcher m1 = Pattern.compile(p).matcher(group);</span><br><span class="line">        <span class="keyword">if</span> (m1.find()) &#123;</span><br><span class="line">            String group1 = m1.group(<span class="number">0</span>);</span><br><span class="line">            <span class="comment">// $1, 取出正则表达式第一个括弧内容</span></span><br><span class="line">            String word = group1.replaceAll(p, <span class="string">&quot;$1&quot;</span>);</span><br><span class="line">            <span class="comment">//异常呼入</span></span><br><span class="line">            <span class="comment">//容器号LPN不能为空</span></span><br><span class="line">            System.out.println(word);</span><br><span class="line">            soureces.add(word);</span><br><span class="line">            String key = packageName + <span class="string">&quot;_&quot;</span>;</span><br><span class="line">            dataBeans.add(<span class="keyword">new</span> DataBean(key, word));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        flag = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">bufReader.close();</span><br><span class="line">inReader.close();</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 翻译</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">translate</span><span class="params">(PsiFile file, List&lt;String&gt; sources, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">flag = <span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">new</span> GetTranslationTask(project, <span class="string">&quot;翻译中&quot;</span>, sources, result -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dataBeans.size(); i++) &#123;</span><br><span class="line">            DataBean dataBean = dataBeans.get(i);</span><br><span class="line">            String str = dataBean.getKey() + StringUtils.formatStr(result.get(i));</span><br><span class="line">            dataBean.setKey(str);</span><br><span class="line">        &#125;</span><br><span class="line">        handResult(file, dataBeans);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        showDialog(<span class="string">&quot;翻译异常&quot;</span>, <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).setCancelText(<span class="string">&quot;Translation Has Been Canceled&quot;</span>).queue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 拼接写入字符串的内容</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getShowContent</span><span class="params">(List&lt;DataBean&gt; attributeValues, String stringPath)</span> </span>&#123;</span><br><span class="line">    StringBuilder block = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    block.append(<span class="string">&quot;&lt;!--################ &quot;</span>).append(layoutName).append(<span class="string">&quot; start ################--&gt;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (DataBean dataBean : attributeValues) &#123;</span><br><span class="line">        <span class="comment">// 处理key值</span></span><br><span class="line">        String keyStr = dataBean.getKey();</span><br><span class="line">        <span class="comment">// [\pP+~$`^=|&lt;&gt;～｀＄＾＋＝｜＜＞￥×]	匹配字母或数字或下划线 --&gt; 过滤掉特殊符号 &amp;!</span></span><br><span class="line">        String ss = keyStr.replaceAll(<span class="string">&quot;[\\pP+~$`^=|&lt;&gt;～｀＄＾＋＝｜＜＞￥×]&quot;</span>, <span class="string">&quot;_&quot;</span>);</span><br><span class="line">        <span class="comment">// 是否有重复的key和value</span></span><br><span class="line">        <span class="keyword">if</span> (isRepeat(ss, stringPath)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        block.append(<span class="string">&quot;&lt;string name=\&quot;&quot;</span>);</span><br><span class="line">        block.append(ss);</span><br><span class="line">        block.append(<span class="string">&quot;\&quot;&gt;&quot;</span>);</span><br><span class="line">        <span class="comment">// 处理value值</span></span><br><span class="line">        <span class="keyword">if</span> (stringPath.contains(<span class="string">&quot;values-zh-rCN&quot;</span>)) &#123;</span><br><span class="line">            block.append(dataBean.getValue());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            String key = dataBean.getKey();</span><br><span class="line"><span class="comment">//                String str = &quot;layout_&quot;;</span></span><br><span class="line"><span class="comment">//                int startIndex = key.indexOf(str) + str.length();</span></span><br><span class="line"><span class="comment">//                String substring = key.substring(startIndex);</span></span><br><span class="line">            String substring = key.substring(key.indexOf(<span class="string">&quot;_&quot;</span>) + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (substring.contains(<span class="string">&quot;_&quot;</span>)) &#123;</span><br><span class="line">                String[] s = substring.split(<span class="string">&quot;_&quot;</span>);</span><br><span class="line">                <span class="keyword">for</span> (String value : s) &#123;</span><br><span class="line">                    block.append(value).append(<span class="string">&quot; &quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                block.deleteCharAt(block.length() - <span class="number">1</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                block.append(substring);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        block.append(<span class="string">&quot;&lt;/string&gt;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    block.append(<span class="string">&quot;&lt;!--################ &quot;</span>).append(layoutName).append(<span class="string">&quot; end ################--&gt;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> block.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 修改java代码里面的字符串</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">changeXml</span><span class="params">(PsiFile file, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">    WriteCommandAction.runWriteCommandAction(project, () -&gt; &#123;</span><br><span class="line">        VirtualFile virtualFile = file.getVirtualFile();</span><br><span class="line">        Document document = FileDocumentManager.getInstance().getDocument(virtualFile);</span><br><span class="line">        <span class="keyword">if</span> (document != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String text = document.getText();</span><br><span class="line">            <span class="keyword">for</span> (DataBean attributeValue : dataBeans) &#123;</span><br><span class="line">                text = text.replace(<span class="string">&quot;\&quot;&quot;</span> + attributeValue.getValue() + <span class="string">&quot;\&quot;&quot;</span>, <span class="string">&quot;R.string.&quot;</span> + attributeValue.getKey());</span><br><span class="line">            &#125;</span><br><span class="line">            document.setText(text);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 往strings.xml中写内容</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeContentXml</span><span class="params">(String stringPath, List&lt;DataBean&gt; dataBeans)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//获取内容</span></span><br><span class="line">    String content = getShowContent(dataBeans, stringPath);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// String stringPath = project.getBasePath() + &quot;/app/src/main/res/values/strings.xml&quot;;</span></span><br><span class="line">        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(stringPath);</span><br><span class="line">        <span class="keyword">if</span> (virtualFile != <span class="keyword">null</span>) &#123;</span><br><span class="line">            Runnable runnable = () -&gt; &#123;</span><br><span class="line">                Document document = FileDocumentManager.getInstance().getDocument(virtualFile);</span><br><span class="line">                <span class="keyword">if</span> (document != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">int</span> lineCount = document.getLineCount();</span><br><span class="line">                    <span class="keyword">int</span> lineNumber = document.getLineStartOffset(lineCount - <span class="number">1</span>);</span><br><span class="line">                    document.insertString(lineNumber, content);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            WriteCommandAction.runWriteCommandAction(project, runnable);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            showDialog(<span class="string">&quot;strings.xml文件没找到&quot;</span>, <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>Fiddler</title>
-    <url>/2021/05/28/20210528_Fiddler%E6%8A%93%E5%8C%85/</url>
-    <content><![CDATA[<h1 id="Fiddler的配置"><a href="#Fiddler的配置" class="headerlink" title="Fiddler的配置"></a>Fiddler的配置</h1><p><img src="/images/fiddler/20210528_fiddler_1.jpg"></p>
-<ol>
-<li><p>在HTTPS选项卡Actions上，选择<code>Trust Root Certificate</code>安装证书</p>
-<p><img src="/images/fiddler/20210528_fiddler_2.png"></p>
-</li>
-<li><p>左下角模式为Captuing，选项栏勾选<code>Stream（流模式和缓冲模式切换，默认是缓冲模式，默认所有的 http 请求数据都返回给fiddler它才会在控制面板展示出来）</code>和<code>Decode（解压请求）</code></p>
-</li>
-<li><p>在右侧Filters选项卡，按条件使用，如Show only if URL contains填入.m3u8，或Ctrl+F搜索m3u8</p>
-</li>
-</ol>
-<h1 id="系统代理设置"><a href="#系统代理设置" class="headerlink" title="系统代理设置"></a>系统代理设置</h1><p>IE浏览器打开Internet选项，修改<code>局域网设置</code></p>
-<ol>
-<li>勾选<code>为LAN使用代理服务器</code>，并配置地址为127.0.0.1，端口8888</li>
-<li>关闭自动配置，<code>自动检测设置</code>，<code>使用自动配置脚本</code></li>
-</ol>
-<p>如Chrome使用了SwitchyOmega，修改成<code>系统代理</code></p>
-<h1 id="Fiddler的应用"><a href="#Fiddler的应用" class="headerlink" title="Fiddler的应用"></a>Fiddler的应用</h1><h2 id="一、应用使用"><a href="#一、应用使用" class="headerlink" title="一、应用使用"></a>一、应用使用</h2><h3 id="应用代理配置"><a href="#应用代理配置" class="headerlink" title="应用代理配置"></a>应用代理配置</h3><ul>
-<li><p>方法一</p>
-<ul>
-<li>使用浏览器代理，其它不需要修改即可</li>
-</ul>
-</li>
-<li><p>方法二</p>
-<ul>
-<li>类型：HTTP代理</li>
-<li>地址：127.0.0.1</li>
-<li>端口：8888</li>
-</ul>
-</li>
-</ul>
-<h3 id="N-m3u8DL-CLI-SimpleG下载"><a href="#N-m3u8DL-CLI-SimpleG下载" class="headerlink" title="N_m3u8DL-CLI-SimpleG下载"></a>N_m3u8DL-CLI-SimpleG下载</h3><ol>
-<li><p>右键save-》Response-》Response Body到本地文件-》放入M3u8地址</p>
-</li>
-<li><p>右键copy-》Just Url-》将红框内容粘贴到BASEURL里面</p>
-<p><img src="/images/fiddler/20210528_fiddler_3.jpg"></p>
-</li>
-<li><p>点击Go</p>
-</li>
-</ol>
-<h3 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h3><p>Q: 如果需要下载多个视频，比较麻烦怎么办？</p>
-<p>A: 可以先抓出所有 M3U8 链接，有三种方法批量下载：</p>
-<ol>
-<li>将 m3u8 链接每行一个存入一个<code>.txt</code> 文件，然后将文件直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
-<li>将 m3u8 文件存到一个文件夹中，然后将文件夹直接拖到 <code>M3U8地址</code>文本框，点击 <code>GO</code> 按钮</li>
-</ol>
-<h2 id="二、断点调试"><a href="#二、断点调试" class="headerlink" title="二、断点调试"></a>二、断点调试</h2><p>略…</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><blockquote>
-<p><a href="https://www.zhihu.com/question/376490136/answer/1113194185">https://www.zhihu.com/question/376490136/answer/1113194185</a></p>
-<p><a href="https://blog.csdn.net/weixin_39883139/article/details/98853135">https://blog.csdn.net/weixin_39883139/article/details/98853135</a></p>
 </blockquote>
 ]]></content>
   </entry>
