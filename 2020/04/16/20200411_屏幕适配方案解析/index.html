@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="计算公式12345px &#x3D; density * dp;density &#x3D; dpi &#x2F; 160;px &#x3D; dp * (dpi &#x2F; 160);  屏幕尺寸、分辨率、像素密度  几种方案基于今日头条的方案适配（修改density，无入侵式） 今日头条方案适配https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;d9QCoBP6kV9VSWvVldVVwA  从dp和px的转换公式 ：px &#x3D; dp *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android屏幕适配方案">
+<meta property="og:url" content="http://example.com/2020/04/16/20200411_%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="改变、突破">
+<meta property="og:description" content="计算公式12345px &#x3D; density * dp;density &#x3D; dpi &#x2F; 160;px &#x3D; dp * (dpi &#x2F; 160);  屏幕尺寸、分辨率、像素密度  几种方案基于今日头条的方案适配（修改density，无入侵式） 今日头条方案适配https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;d9QCoBP6kV9VSWvVldVVwA  从dp和px的转换公式 ：px &#x3D; dp *">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/20200416_屏幕适配方案1.png">
+<meta property="og:image" content="http://example.com/images/20200416_屏幕适配方案2.png">
+<meta property="article:published_time" content="2020-04-16T09:45:53.000Z">
+<meta property="article:modified_time" content="2021-05-17T06:22:15.465Z">
+<meta property="article:author" content="ycc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/20200416_屏幕适配方案1.png">
+
+<link rel="canonical" href="http://example.com/2020/04/16/20200411_%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%E8%A7%A3%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android屏幕适配方案 | 改变、突破</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">改变、突破</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">年轻人一番作为海纳百川，苦心人笑看风云勇往直前</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/04/16/20200411_%E5%B1%8F%E5%B9%95%E9%80%82%E9%85%8D%E6%96%B9%E6%A1%88%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ycc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="改变、突破">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android屏幕适配方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-16 17:45:53" itemprop="dateCreated datePublished" datetime="2020-04-16T17:45:53+08:00">2020-04-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a>计算公式</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">px = density * dp;</span><br><span class="line"></span><br><span class="line">density = dpi / 160;</span><br><span class="line"></span><br><span class="line">px = dp * (dpi / 160);</span><br></pre></td></tr></table></figure>
+
+<h4 id="屏幕尺寸、分辨率、像素密度"><a href="#屏幕尺寸、分辨率、像素密度" class="headerlink" title="屏幕尺寸、分辨率、像素密度"></a>屏幕尺寸、分辨率、像素密度</h4><img src="/images/20200416_屏幕适配方案1.png" class="nofancybox"/>
+
+<h3 id="几种方案"><a href="#几种方案" class="headerlink" title="几种方案"></a>几种方案</h3><h4 id="基于今日头条的方案适配（修改density，无入侵式）"><a href="#基于今日头条的方案适配（修改density，无入侵式）" class="headerlink" title="基于今日头条的方案适配（修改density，无入侵式）"></a>基于今日头条的方案适配（修改density，无入侵式）</h4><ul>
+<li><p>今日头条方案适配<br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA">https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA</a></p>
+<blockquote>
+<p>从dp和px的转换公式 ：px = dp * density<br>可以看出，如果设计图宽为360dp，想要保证在所有设备计算得出的px值都正好是屏幕宽度的话，我们只能修改 density 的值。</p>
+</blockquote>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScreenAdapterUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">float</span> appDensity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">float</span> appScaledDensity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> DisplayMetrics appDisplayMetrics;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> barHeight;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDensity</span><span class="params">(<span class="meta">@NonNull</span> Application application)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 获取application的DisplayMetrics</span></span><br><span class="line">        appDisplayMetrics = application.getResources().getDisplayMetrics();</span><br><span class="line">        <span class="comment">// 获取状态栏高度</span></span><br><span class="line">        barHeight = ScreenUtil.getStatusBarHeight(application);<span class="comment">// 改变density前，提前获取状态栏的高度</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (appDensity == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// 初始化的时候赋值</span></span><br><span class="line">            appDensity = appDisplayMetrics.density;</span><br><span class="line">            appScaledDensity = appDisplayMetrics.scaledDensity;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 添加字体变化的监听</span></span><br><span class="line">            application.registerComponentCallbacks(<span class="keyword">new</span> ComponentCallbacks() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onConfigurationChanged</span><span class="params">(Configuration newConfig)</span> </span>&#123;</span><br><span class="line">                    <span class="comment">// 字体改变后,将appScaledDensity重新赋值</span></span><br><span class="line">                    <span class="keyword">if</span> (newConfig != <span class="keyword">null</span> &amp;&amp; newConfig.fontScale &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        appScaledDensity = application.getResources().getDisplayMetrics().scaledDensity;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLowMemory</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此方法在BaseActivity中做初始化(如果不封装BaseActivity的话,直接用下面那个方法就好)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDefault</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ScreenUtils.isPortrait()) &#123;</span><br><span class="line">            setAppOrientation(activity, ScreenUtil.WIDTH);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            setAppOrientation(activity, ScreenUtil.HEIGHT);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此方法用于在某一个Activity里面更改适配的方向</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setOrientation</span><span class="params">(Activity activity, String orientation)</span> </span>&#123;</span><br><span class="line">        setAppOrientation(activity, orientation);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * targetDensity targetScaledDensity targetDensityDpi 这三个参数是统一修改过后的值</span></span><br><span class="line"><span class="comment">    * &lt;p&gt;</span></span><br><span class="line"><span class="comment">    * orientation:方向值,传入width或height</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setAppOrientation</span><span class="params">(<span class="meta">@Nullable</span> Activity activity, String orientation)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> targetDensity;</span><br><span class="line">        <span class="comment">// 竖屏以最小宽度适配</span></span><br><span class="line">        <span class="keyword">if</span> (orientation.equals(ScreenUtil.HEIGHT)) &#123;</span><br><span class="line">            targetDensity = (appDisplayMetrics.heightPixels - barHeight) / <span class="number">600f</span>;<span class="comment">// 此处的667f替换为你的实际值</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            targetDensity = appDisplayMetrics.widthPixels / <span class="number">360f</span>;<span class="comment">// 此处的360f替换为你的实际值</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> targetScaledDensity = targetDensity * (appScaledDensity / appDensity);</span><br><span class="line">        <span class="keyword">int</span> targetDensityDpi = (<span class="keyword">int</span>)(<span class="number">160</span> * targetDensity);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        * 最后在这里将修改过后的值赋给系统参数</span></span><br><span class="line"><span class="comment">        *</span></span><br><span class="line"><span class="comment">        * 只修改Activity的density值</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();</span><br><span class="line">        activityDisplayMetrics.density = targetDensity;</span><br><span class="line">        activityDisplayMetrics.scaledDensity = targetScaledDensity;</span><br><span class="line">        activityDisplayMetrics.densityDpi = targetDensityDpi;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ScreenUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String WIDTH = <span class="string">&quot;width&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String HEIGHT = <span class="string">&quot;height&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 获取手机状态栏高度</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getStatusBarHeight</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> resourceId = context.getResources().getIdentifier(<span class="string">&quot;status_bar_height&quot;</span>, <span class="string">&quot;dimen&quot;</span>, <span class="string">&quot;android&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (resourceId &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            result = context.getResources().getDimensionPixelSize(resourceId);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>AndroidAutoSize<br>  <a target="_blank" rel="noopener" href="https://github.com/JessYanCoding/AndroidAutoSize">https://github.com/JessYanCoding/AndroidAutoSize</a><br>  不过对横屏适配需要在 AndroidManifest 中另写横屏的全局设计图尺寸 </p>
+</li>
+<li><p>Blankj 屏幕适配<br>  集成在<a target="_blank" rel="noopener" href="https://github.com/Blankj/AndroidUtilCode%E5%BA%93%E7%9A%84AdaptScreen">https://github.com/Blankj/AndroidUtilCode库的AdaptScreen</a> 相关 -&gt; AdaptScreenUtils.java -&gt; Demo<br>  <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7da141e682c7">https://www.jianshu.com/p/7da141e682c7</a><br>  适配需要修改dimens中dp为pt单位才能适配</p>
+</li>
+</ul>
+<h4 id="smallestWidth-限定符适配"><a href="#smallestWidth-限定符适配" class="headerlink" title="smallestWidth 限定符适配"></a>smallestWidth 限定符适配</h4><ul>
+<li>需要用工具生成基于设计图尺寸下所有smallestWidth对应dimens</li>
+<li>AndroidStudio插件ScreenMatch<blockquote>
+<p>smallestWidth 限定符适配寻找 dimens.xml 文件的原理是从大往小找，例如设备的最小宽度为 360dp，就会先去找 values-360dp，发现没有则会向下找 values-320dp，如果还是没有才找默认的 values 下的 demens.xml 文件</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="布局限定符适配-—-gt-（平板）横屏适配"><a href="#布局限定符适配-—-gt-（平板）横屏适配" class="headerlink" title="布局限定符适配 —&gt; （平板）横屏适配"></a>布局限定符适配 —&gt; （平板）横屏适配</h4><ul>
+<li>只适用于一款App在手机和平板上要显示不同的布局，但是数据源一致。  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">layout-sw600dp-land</span><br><span class="line">layout-sw600dp</span><br><span class="line">layout</span><br><span class="line">layout-land</span><br><span class="line">values-sw600dp</span><br><span class="line">values-sw600dp-land</span><br><span class="line">drawable-sw600dp-mdpi</span><br><span class="line">drawable-sw600dp-xxxhdpi</span><br><span class="line">drawable-sw600dp-xxhdpi</span><br><span class="line">drawable-sw600dp-hdpi</span><br></pre></td></tr></table></figure>
+<h3 id="几种方案优缺点"><a href="#几种方案优缺点" class="headerlink" title="几种方案优缺点"></a>几种方案优缺点</h3></li>
+<li>今日头条方案<blockquote>
+<p>优点:</p>
+<ol>
+<li>支持以宽或者高任意一个维度去适配，保持该维度上和设计图一致</li>
+<li>支持dp和sp单位，控制迁移成本到最小</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>density的计算结果可能精度不够，从而导致适配出现偏差<br>由于头条的适配方案是以手机设备为测试标准，手机的宽度往往可以直接整除，而手机的高度（或平板的宽度）则不一定可以被整除，如果以手机高度（或平板宽度）作为density的计算因子，最后得出的density值可能会有小数。 但是今日头条给出的方法，做除法后结果会取整，从而会影响精度。</li>
+<li>计算状态栏和导航栏的高度会出错<br>由于使用的是 Application#getResources，这会导致最后计算状态栏高度使用的是修改过后的 density。</li>
+<li>跳出本应用后再返回，适配会失效，比如在应用内启动相机拍照（如上传头像），拍完照返回应用时，头条适配会失效。</li>
+</ol>
+</blockquote>
+</li>
+<li>smallestWidth 限定符适配<blockquote>
+<p>优点：</p>
+<ol>
+<li>参照上述smallestWidth 限定符适配对屏幕分辨率限定符的比较优势</li>
+<li>根据设计图的最小宽度配置基准dp后，设计图标注多少 dp，布局中就写多少 dp。</li>
+<li>可以一键生成所有需要适配的尺寸文件</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>最小宽度为 392.7272 与 411.4285 的手机不能达到完全适配。原因是该插件的默认值都是取整的，即 392.7272 与 411.4285 在插件中写的是 392 与 411。</li>
+<li>因为是基于smallestWidth 限定符适配原理，所以只能根据最小宽度来设定基准dp，即只适用于短边固定，长边可滚动的UI设计图，这对手机来说没有问题，但是对横屏设计的平板来说就是一个缺陷，通常横屏设计的平板UI设计图是长边固定，短边可滚动，这就要求横屏设计的平板需要以最大宽度（即长边）来设定基准dp——ScreenMatch无法实现。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h3 id="计算屏幕各种参数的工具"><a href="#计算屏幕各种参数的工具" class="headerlink" title="计算屏幕各种参数的工具"></a>计算屏幕各种参数的工具</h3><p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/chenyinchao/ScreenTools">https://github.com/chenyinchao/ScreenTools</a></p>
+<img src="/images/20200416_屏幕适配方案2.png" class="nofancybox"/>
+
+
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA">https://mp.weixin.qq.com/s/d9QCoBP6kV9VSWvVldVVwA</a><br>  <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e715c4496bb3">https://www.jianshu.com/p/e715c4496bb3</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/11/20200411_%E8%A3%85%E6%9C%BA/" rel="prev" title="装机">
+      <i class="fa fa-chevron-left"></i> 装机
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/17/20200417_C++%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" rel="next" title="C++ 基础语法">
+      C++ 基础语法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">计算公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E5%B0%BA%E5%AF%B8%E3%80%81%E5%88%86%E8%BE%A8%E7%8E%87%E3%80%81%E5%83%8F%E7%B4%A0%E5%AF%86%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">屏幕尺寸、分辨率、像素密度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88"><span class="nav-number"></span> <span class="nav-text">几种方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A1%E7%9A%84%E6%96%B9%E6%A1%88%E9%80%82%E9%85%8D%EF%BC%88%E4%BF%AE%E6%94%B9density%EF%BC%8C%E6%97%A0%E5%85%A5%E4%BE%B5%E5%BC%8F%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">基于今日头条的方案适配（修改density，无入侵式）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#smallestWidth-%E9%99%90%E5%AE%9A%E7%AC%A6%E9%80%82%E9%85%8D"><span class="nav-number">2.</span> <span class="nav-text">smallestWidth 限定符适配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%83%E5%B1%80%E9%99%90%E5%AE%9A%E7%AC%A6%E9%80%82%E9%85%8D-%E2%80%94-gt-%EF%BC%88%E5%B9%B3%E6%9D%BF%EF%BC%89%E6%A8%AA%E5%B1%8F%E9%80%82%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">布局限定符适配 —&gt; （平板）横屏适配</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number"></span> <span class="nav-text">几种方案优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B1%8F%E5%B9%95%E5%90%84%E7%A7%8D%E5%8F%82%E6%95%B0%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="nav-number"></span> <span class="nav-text">计算屏幕各种参数的工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">参考</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ycc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ycc</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

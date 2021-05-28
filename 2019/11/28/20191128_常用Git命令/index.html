@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="对比两次修改git diff &lt;commit-1&gt; &lt;commit-2&gt;  列出两次修改间的文件git diff --name-only &lt;commit-1&gt; &lt;commit-2&gt;  git rebase 捋顺提交 git rebase -i commitId，表示对此commitId以上commit进行操作 其中p为合并到此commit上，s为要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用Git命令">
+<meta property="og:url" content="http://example.com/2019/11/28/20191128_%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="改变、突破">
+<meta property="og:description" content="对比两次修改git diff &lt;commit-1&gt; &lt;commit-2&gt;  列出两次修改间的文件git diff --name-only &lt;commit-1&gt; &lt;commit-2&gt;  git rebase 捋顺提交 git rebase -i commitId，表示对此commitId以上commit进行操作 其中p为合并到此commit上，s为要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/20191128_Git提交代码.png">
+<meta property="og:image" content="http://example.com/images/20191128_Git导图.jpg">
+<meta property="article:published_time" content="2019-11-28T09:47:15.000Z">
+<meta property="article:modified_time" content="2021-05-17T06:22:15.452Z">
+<meta property="article:author" content="ycc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/20191128_Git提交代码.png">
+
+<link rel="canonical" href="http://example.com/2019/11/28/20191128_%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>常用Git命令 | 改变、突破</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">改变、突破</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">年轻人一番作为海纳百川，苦心人笑看风云勇往直前</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/11/28/20191128_%E5%B8%B8%E7%94%A8Git%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ycc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="改变、突破">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常用Git命令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-28 17:47:15" itemprop="dateCreated datePublished" datetime="2019-11-28T17:47:15+08:00">2019-11-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ol>
+<li><p>对比两次修改<br><code>git diff &lt;commit-1&gt; &lt;commit-2&gt;</code></p>
+</li>
+<li><p>列出两次修改间的文件<br><code>git diff --name-only &lt;commit-1&gt; &lt;commit-2&gt;</code></p>
+</li>
+<li><p>git rebase 捋顺提交<br> <code>git rebase -i commitId</code>，表示对此commitId以上commit进行操作<br> 其中<code>p</code>为合并到此commit上，<code>s</code>为要合并的commit<br> 那么，已经push的怎么rebase？只好push的时候加上–force覆盖origin branch上的提交（不推荐，丢失记录，并无法回退）</p>
+</li>
+<li><p>git commit –amend<br>当多次git commit后再一次性git push会在log里有很多fix bug的提交记录，这时如果用 <code>git commit --amend --no-edit</code>(会保留上次的提交信息)</p>
+</li>
+<li><p><code>git reflog</code>, 查看每一次操作的历史命令和简明历史log，便于通过指针切换版本<br><code>git log --oneline</code>, 查看简明历史log（是对 <code>git log --pretty=oneline</code>命令的简化）</p>
+</li>
+<li><p>版本前进、后退(本质：通过指针进行版本切换), <code>git reset --hard HEAD/commit_id</code></p>
+<pre><code> HEAD 是当前版本（可以理解成一个游标）
+ HEAD^是上一个版本
+ HEAD^^是上上个版本
+ HEAD~100是回退100个后的版本
+</code></pre>
+</li>
+<li><p>git reset 三个参数对比</p>
+<pre><code> --soft 参数：
+ 仅仅在本地库移动指针 HEAD
+
+ --mixed 参数：
+ 在本地库移动 HEAD 指针
+ 重置暂存区
+ 
+ --hard 参数：
+ 在本地库移动 HEAD 指针
+ 重置暂存区
+ 重置工作区
+</code></pre>
+</li>
+<li><p>撤销操作</p>
+<pre><code> git reset HEAD filename 撤回放到暂存区的文件
+ git reset .  撤回所有文件(注意后面还有个.)
+ git commit --amend 撤销上一次提交，并将暂存区文件重新提交
+ git checkout -- &lt;file&gt; 拉取暂存区文件，并将其替换成工作区文件
+ git reset HEAD -- &lt;file&gt; 拉取最近一次提交到版本库的文件到暂存区，该操作不影响工作区 //简单的来说，就是可以帮我们从版本库中拉取文件到暂存区，当我们把工作区的某个文件弄乱了，我们就可以使用该命令把版本库中的那个文件拉到暂存区，然后在拉回工作区
+</code></pre>
+</li>
+<li><p>查看git所有配置</p>
+<pre><code> git config -l
+</code></pre>
+</li>
+<li><p>删除untrack files</p>
+<pre><code>删除当前目录下untrack文件，不包括文件夹和.gitignore中指定的文件和文件夹
+git clean -f
+
+删除当前目录下untrack文件和文件夹， 不包括.gitignore中指定的文件和文件夹
+git clean -df
+
+删除当期目录下的所有untrack的文件和文件夹
+git clean -xdf
+
+显示会被删除的文件(建议删除前先查看一下)
+git clean -nf
+git clean -ndf
+git clean -nxfd
+</code></pre>
+</li>
+<li><p>git查看某次提交/更新所涉及的文件</p>
+<pre><code>git log --stat
+</code></pre>
+</li>
+<li><p>gitignore不起作用（. gitignore中已经标明忽略的文件目录下的文件，git push的时候还会出现在push的目录中，原因是因为在git忽略目录中，新建的文件在git中会有缓存，如果某些文件已经被纳入了版本管理中，就算是在.gitignore中已经声明了忽略路径也是不起作用的，这时候我们就应该先把本地缓存删除，然后再进行git的push，这样就不会出现忽略的文件了）。git清除本地缓存命令如下：</p>
+<pre><code>git rm -r --cached .
+git add .
+git commit -m &#39;update .gitignore&#39;
+</code></pre>
+</li>
+</ol>
+</br>
+
+<img src="/images/20191128_Git提交代码.png" class="nofancybox"/>
+<img src="/images/20191128_Git导图.jpg" class="nofancybox"/>
+
+<blockquote>
+<p>参考：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_36431213/article/details/78858848">https://blog.csdn.net/qq_36431213/article/details/78858848</a></p>
+<p>相关阅读：<br><a target="_blank" rel="noopener" href="https://juejin.im/post/5a6ee1dd518825735300e0c0">https://juejin.im/post/5a6ee1dd518825735300e0c0</a></p>
+<p>推荐阅读：<br><a target="_blank" rel="noopener" href="https://github.com/521xueweihan/git-tips">https://github.com/521xueweihan/git-tips</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/27/20191127_%E5%8F%91%E5%B8%83Poetry%E6%A1%8C%E9%9D%A2%E8%AF%97%E8%AF%8Dv1.0%E7%89%88%E6%9C%AC/" rel="prev" title="发布Poetry桌面古诗词v1.0版本">
+      <i class="fa fa-chevron-left"></i> 发布Poetry桌面古诗词v1.0版本
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/10/20191210_%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91Rxjava%E5%AD%A6%E4%B9%A0/" rel="next" title="【转载】Rxjava学习">
+      【转载】Rxjava学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ycc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ycc</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
